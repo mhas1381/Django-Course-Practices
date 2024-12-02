@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+import datetime
 # Create your views here.
 
 def hello(request):
@@ -17,3 +17,10 @@ def hello(request):
         else:
             Message += "<h1>You dont have entered any country in url parameter</h1>"
     return HttpResponse(Message)
+
+def show_time(request):
+    data = {
+        "name" : "Mamad",
+        "time" : datetime.datetime.now()
+    }
+    return render(request , 'website/index.html' ,context = data)
