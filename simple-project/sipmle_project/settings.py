@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -122,3 +122,42 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING_DIR = BASE_DIR / 'logs'
+
+if not os.path.exists(LOGGING_DIR):
+    os.makedirs(LOGGING_DIR)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters":{
+        "verbose":{
+            "format":'{filename} - {funcName} - {levelname}' , 
+            "style" : "{"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter":"verbose",
+        },
+        "custom_logger":{
+            'level': 'DEBUG',
+            'class' : 'logging.FileHandler',
+            'filename': LOGGING_DIR / 'customlogs.log',
+            'formatter' : 'verbose'
+        }
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+    "loggers":{
+        'custom_logger':{
+            'handlers':['custom_logger'],
+            'level' : 'DEBUG',
+            'propagate':True
+        }
+    }
+}
